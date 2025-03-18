@@ -1,0 +1,138 @@
+@charset "UTF-8";
+
+html {
+    font-size: 100%;
+}
+body {
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    line-height: 1.7;
+    background-color: #ffffff;
+    margin: 0px;
+}
+a {
+    text-decoration: none;
+}
+img {
+    max-width: 100%;
+}
+h1, h2 {
+    text-align: center;
+}
+
+/* header */
+header {
+    margin: auto;
+    padding: .5rem 0;
+}
+.logo {
+    width: 80px;
+}
+.main-nav {
+    display: flex;
+    justify-content: center;
+    gap: 2.0rem;
+    font-size: 1.3rem;
+    list-style: none;
+    padding: 0px;
+}
+.main-nav a {
+    font-weight: bold;
+    color: #3674B5;
+}
+.main-nav a:hover {
+    color: #0f3c6d;
+}
+
+/* main */
+main {
+    padding: 1rem 2rem;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.video-select {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: .5rem;
+}
+.url-input {
+    width: 100%;
+    background-color: #ffffff;
+    border: 2px solid #0f3c6d;
+    border-radius: 10px;
+    padding: .3rem .5rem;
+    font-size: 0.8rem;
+}
+.btn {
+    background-color: #3674B5;
+    font-size: 0.8rem;
+    color: #ffffff;
+    padding: .5rem 1rem;
+    border-radius: 10px;
+}
+.video-container {
+    width: 100%;
+}
+.video {
+    width: 100%;
+    aspect-ratio: 16/9;
+    margin: 1rem auto;
+}
+.script {
+    overflow: auto;
+    height: 20rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    border: 3px solid #3674B5;
+    border-radius: 10px;
+    width: 100%;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+.clicked {
+    color: #3674B5;
+}
+
+/* flashcard */
+.card {
+    border: 5px solid #3674B5;
+    border-radius: 10px;
+    width: 90%;
+    aspect-ratio: 16/9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.card p {
+    text-align: center;
+}
+.btns {
+    margin: 1rem auto;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+.btns button {
+    width: 5rem;
+}
+
+/* footer */
+footer {
+    text-align: center;
+    margin: 5rem auto;
+}
+
+@media (min-width: 800px) {
+    main {
+        width: 50%;
+    }
+    .flashcard-page p {
+        font-size: 2rem;
+    }
+
+}

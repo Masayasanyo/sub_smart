@@ -1,0 +1,8 @@
+<Postgresql>
+CREATE TABLE flash_card (
+    id SERIAL PRIMARY KEY,
+    heads VARCHAR(255) NOT NULL,
+    tails VARCHAR(255) NOT NULL,
+    is_ok BOOLEAN DEFAULT FALSE, 
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
