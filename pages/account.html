@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>Sub Smart - Flashcards</title>
+        <title>Sub Smart - Account</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">
         <link rel="stylesheet" href="../css/styles.css">
@@ -45,7 +45,7 @@
                 </li>
             </ul>
         </nav>
-
+        
         <header>
             <h1>
                 <a href="../index.html"><img class="logo" src="../assets/logo.svg" alt="logo"></a>
@@ -56,30 +56,29 @@
         </header>
 
         <main>
-            <div class="fc-list-header">
-                <h2>Flashcards</h2>
-                <svg id="add-btn" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle-fill add-btn" viewBox="0 0 16 16">
-                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
-                </svg>
-            </div>
-
-            <form id="create-card-form">
+            <h2>Account</h2>
+            <form class="account-form" id="account-form">
                 <label>
-                    Title
-                    <input id="title" type="text" class="input">
+                    Email
+                    <input class="input" type="email" name="email" id="email">
                 </label>
-                <button id="create-card-btn" type="button" class="btn width-max">Submit</button>
+                <label>
+                    Password
+                    <input class="input" type="password" name="password">
+                </label>
+                <div class="btns">
+                    <button type="button" id="cancel-account-btn" class="btn width-max">Cancel</button>
+                    <button type="button" id="submit-btn" class="btn width-max">Submit</button>
+                </div>
             </form>
-            
 
-            <ul class="fc-list" id="fc-list">
-            </ul>
+            <p id="logout" class="logout">Log out</p>
         </main>
 
         <footer>
             <small class="copyright">&copy; <span id="year"></span> SubSmart</small>
         </footer>
 
-        <script src="../js/flashcards.js"></script>
+        <script src="../js/account.js"></script>
     </body>
 </html>

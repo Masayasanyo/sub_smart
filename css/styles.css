@@ -54,6 +54,7 @@ select {
 .diary-form, 
 .login-form, 
 .signup-form, 
+.account-form, 
 #create-card-form, 
 #add-card-form {
     display: flex;
@@ -140,7 +141,8 @@ img {
 .width-max {
     width: 100%;
 }
-#again-btn {
+#again-btn, 
+#cancel-account-btn {
     background-color: #F2EFE7;
     color: #2973B2;
     border: 3px solid #2973B2;
@@ -168,6 +170,7 @@ img {
 .high-ta {
     height: 300px;
 }
+
 /* nav */
 nav {
     position: fixed;
@@ -219,6 +222,7 @@ header {
 .signup-header {
     justify-content: center;
 }
+
 /* footer */
 footer {
     text-align: center;
@@ -282,6 +286,12 @@ footer {
     align-items: center;
     font-size: 1.5rem;
     word-break: break-word;
+}
+
+/* Account page */
+.logout {
+    color: #2973B2;
+    text-align: center;
 }
 
 @media (min-width: 800px) {
