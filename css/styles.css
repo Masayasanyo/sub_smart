@@ -53,10 +53,19 @@ select {
 /* Form */
 .diary-form, 
 .login-form, 
-.signup-form {
+.signup-form, 
+#create-card-form, 
+#add-card-form {
     display: flex;
     flex-direction: column;
     gap: 2rem;
+}
+#create-card-form, 
+#add-card-form {
+    display: none;
+    border: 5px solid #2973B2;
+    border-radius: 10px;
+    padding: 24px 30px;
 }
 
 /* List */
@@ -91,12 +100,17 @@ img {
 .open-btn, .cancel-btn, .arrow-btn, .add-btn, .dot-btn, .shuffle-btn {
     fill: #2973B2;
 }
+.btns {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
 .btn {
     font-weight: bold;
     text-align: center;
     padding: 8px 16px;
     background-color: #2973B2;
-    color: #E8ECD7;
+    color: #F2EFE7;
     border-radius: 10px;
     font-size: 1rem;
 }
@@ -126,6 +140,12 @@ img {
 .width-max {
     width: 100%;
 }
+#again-btn {
+    background-color: #F2EFE7;
+    color: #2973B2;
+    border: 3px solid #2973B2;
+}
+
 /* Input */
 .input {
     width: 100%;
@@ -161,12 +181,12 @@ nav {
     color: #E8ECD7;
 }
 nav li {
-    display: flex;
-    justify-content: space-between;
     margin: 2rem 0 1rem 0;
     padding: 0 1rem;
 }
 nav a {
+    display: flex;
+    justify-content: space-between;
     font-weight: bold;
     text-decoration: none;
     color: #F2EFE7;
@@ -184,8 +204,9 @@ header {
     justify-content: space-between;
     align-items: center;
 }
-.fc-list-header, .lines-list-header {
+.fc-list-header, .lines-list-header, .edit-fc-header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
     gap: 1rem;
 }

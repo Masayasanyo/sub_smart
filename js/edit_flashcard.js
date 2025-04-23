@@ -1,6 +1,6 @@
-// Get words list data
+// Get card id
 const params = new URLSearchParams(window.location.search);
-const wordsList = JSON.parse(params.get("words"));
+const id = JSON.parse(params.get("id"));
 
 
 // Backend URL
@@ -45,70 +45,80 @@ async function checkSession() {
 checkSession();
 
 
-// Fetch cards
-let cardsList = [];
-async function fetchCards() {
+// // Fetch card data
+let cardInfo = [];
+let cardsData = [];
+async function fetchCard() {
 	try {
 		const token = localStorage.getItem("jwt");
 		const response = await fetch(`${endpoint}/flashcards`, {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-		});
-		const data = await response.json();
-        if (data.data.length < 1) {
-            createCard();
-        } else {
-            cardsList = data.data;
-            setSelect();
-        }
-	} catch (error) {
-		console.error(`Internal server error.`, error);
-	}
-}
-fetchCards();
-
-
-// Create a card if user does not have any cards.
-async function createCard() {
-	try {
-		const token = localStorage.getItem("jwt");
-		await fetch(`${endpoint}/flashcards/create`, {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${token}`,
                 "Content-Type": "application/json",
             }, 
-            body: JSON.stringify({ title: "New Card" }), 
+            body: JSON.stringify({ card_id: id }), 
 		});
-        fetchCards
+		const data = await response.json();
+        if (data.cards.length > 0) {
+            cardsData = data.cards;
+        }
+        if (data.card_info.length > 0) {
+            cardInfo = data.card_info;
+        }
+
+        console.log(data)
+        setHtml();
 	} catch (error) {
 		console.error(`Internal server error.`, error);
 	}
 }
+fetchCard();
 
 
-// Set select and option
-function setSelect() {
-    document.getElementById("card").innerHTML = cardsList
+// // Display form button
+document.getElementById("add-btn").addEventListener("click", () => {
+    const state = document.getElementById("add-card-form").style.display;
+    if (state === "none" || !state) {
+        document.getElementById("add-card-form").style.display = "flex";
+    } else {
+        document.getElementById("add-card-form").style.display = "none";
+    }
+});
+
+
+// Add new cards
+document.getElementById("add-card-btn").addEventListener("click", async () => {
+    const enWord = document.getElementById("new-en").value;
+    const jaWord = document.getElementById("new-ja").value;
+    const wordsList = [{ en: enWord, ja: jaWord }];
+
+    try {
+        const token = localStorage.getItem("jwt");
+        await fetch(`${endpoint}/flashcards/add`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+            }, 
+            body: JSON.stringify({ wordsList: wordsList, card_id: id }), 
+        });
+        document.getElementById("add-card-form").style.display = "none";
+        fetchCard()
+    } catch (error) {
+        console.error(`Internal server error.`, error);
+    }
+});
+
+
+// Set html
+function setHtml() {
+    document.getElementById("fc-title").value = cardInfo[0].title;    
+    document.getElementById("cards").innerHTML = cardsData
         .map((card) => {
-            return `
-                    <option value="${card.id}">${card.title}</option>
-                    `;
-            })
-        .join("");  
-}
-
-
-// Set words list to html
-function setWords() {
-    document.getElementById("words-list").innerHTML = wordsList
-        .map((words, index) => {
-            const id = index;
-            const enWord = words.en;
-            const jaWord = words.ja;
+            const id = card.id;
+            const enWord = card.en;
+            const jaWord = card.ja;
 
             return `
                     <li class="words" id="w-id-${id}">
@@ -128,7 +138,7 @@ function setWords() {
                             </div>
                         </div>
 
-                        <svg onclick="cancelWords(${id})" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-x cancel-btn" viewBox="0 0 16 16">
+                        <svg onclick="deleteWord(${id})" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-x cancel-btn" viewBox="0 0 16 16">
                             <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
                         </svg>
                     </li>       
@@ -136,11 +146,10 @@ function setWords() {
             })
         .join("");  
 }
-setWords();
 
 
-// Cancel words
-function cancelWords(id) {
+// Delete words
+function deleteWord(id) {
     const targetId = `w-id-${id}`;
     let currrentHtml = document.querySelectorAll(".words");
     currrentHtml.forEach(html => {
@@ -148,27 +157,36 @@ function cancelWords(id) {
             html.remove();
         }
     });
-    wordsList.splice(id, 1);
+
+    cardsData = cardsData.filter(card => card.id !== id);
     setHtml();
 }
 
 
-// Submit words
-document.getElementById("submit-words").addEventListener("click", async () => {
-    const card_id = document.getElementById("card").value;
+// Submit cange
+document.getElementById("submit-change-btn").addEventListener("click", async () => {
+    const title = document.getElementById("fc-title").value;
 
     try {
-        const token = localStorage.getItem('jwt');
-        await fetch(`${endpoint}/flashcards/add`, {
+        const token = localStorage.getItem("jwt");
+        await fetch(`${endpoint}/flashcards/update`, {
             method: "POST",
             headers: {
-                'Authorization': `Bearer ${token}`, 
-                'Content-Type': 'application/json' 
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
             }, 
-            body: JSON.stringify({ wordsList: wordsList, card_id: card_id }), 
+            body: JSON.stringify({ title: title, wordsList: cardsData, card_id: id }), 
         });
-        location.href = 'flashcards.html';
+        document.getElementById("add-card-form").style.display = "none";
+        const params = new URLSearchParams({ id, id });
+        window.location.href = `flashcard.html?${params.toString()}`;
     } catch (error) {
         console.error(`Internal server error.`, error);
     }
+});
+
+// Cancel edit
+document.getElementById("cancel-edit-btn").addEventListener("click", async () => {
+    const params = new URLSearchParams({ id, id });
+    window.location.href = `flashcard.html?${params.toString()}`;
 });
