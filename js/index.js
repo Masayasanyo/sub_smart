@@ -11,9 +11,11 @@ document.querySelector("#year").innerHTML = currentYear;
 document.getElementById("nav-cancel").addEventListener("click", () => {
     document.getElementById("sidebar").style.display = "none";
 });
+
 document.getElementById("open-nav").addEventListener("click", () => {
     document.getElementById("sidebar").style.display = "block";
 });
+
 document.getElementById("sidebar").style.display = "none";
 
 
@@ -41,14 +43,23 @@ checkSession();
 
 
 // Get youtube by using the url
-let url = "";
+let srcUrl = "https://www.youtube.com/embed/";
+let videoId = '';
+
 document.getElementById("submit-url").addEventListener("click", (e) => {
 	e.preventDefault();
-	url = document.getElementById("url").value;
-	document.querySelector(".video").src = url;
+
+    srcUrl = "https://www.youtube.com/embed/";
+    videoId = '';
+
+    videoId = document.getElementById("url").value.split("v=")[1];
+    srcUrl = srcUrl + videoId;
+
+	document.querySelector(".video").src = srcUrl;
 
 	fetchTranscript();
 });
+
 
 // Fetch subtitle
 let transcriptList = [];
@@ -57,7 +68,6 @@ let enWord = '';
 let jaWord = '';
 
 async function fetchTranscript() {
-    const videoId = url.split("/embed/")[1].split("?")[0];
     try {
 		const token = localStorage.getItem("jwt");
         const response = await fetch(`${endpoint}/transcript`, {
@@ -75,7 +85,7 @@ async function fetchTranscript() {
             const row = transcriptList[i].text.replaceAll("\n", "");
             const wordList = row.split(/\s+/);
             for (let j = 0; j < wordList.length; j++) {
-                transcript += `<span class="${id} word">${wordList[j]} </span>`;
+                transcript += `<span id="w-id-${id}" class="word">${wordList[j]} </span>`;
                 id++;
             }
         }
@@ -84,8 +94,9 @@ async function fetchTranscript() {
 
         document.querySelectorAll(".word").forEach(word => {
             word.addEventListener("click", async () => {
+                word.style.color = "#2973B2";
                 await translateText(word.textContent);
-            })
+            });
         });
     } catch (error) {
         console.error(`Server error`, error);
