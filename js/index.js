@@ -80,6 +80,7 @@ async function fetchTranscript() {
         });
         const data = await response.json();
         transcriptList = data.data;
+        console.log(transcriptList)
         let id = 0;
         for (let i = 0; i < transcriptList.length; i++) {
             const row = transcriptList[i].text.replaceAll("\n", "");
@@ -106,12 +107,20 @@ async function fetchTranscript() {
 
 // translate words
 async function translateText(text) {
-    const apiUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|ja`;
     try {
-        const response = await fetch(apiUrl);
+        const token = localStorage.getItem("jwt");
+        const response = await fetch(`${endpoint}/transcript/translate`, {
+            method: "POST",
+            headers: {
+				"Authorization": `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }, 
+            body: JSON.stringify({word: text}), 
+        });
         const data = await response.json();
+
 		enWord = text;
-		jaWord = data.responseData.translatedText;
+		jaWord = data.data;
 		await applyDictionary();
     } catch (error) {
         return text;
