@@ -1,5 +1,4 @@
-// Backend URL
-const endpoint = 'http://localhost:4000';
+import { endpoint } from "./config.js";
 
 
 // Footer
@@ -34,7 +33,7 @@ async function checkSession() {
 		}
 	} catch (error) {
 		console.error(`Internal server error.`, error);
-		window.location.href = "login.html";
+		// window.location.href = "login.html";
 	}
 }
 checkSession();

@@ -1,10 +1,9 @@
+import { endpoint } from "./config.js";
+
+
 // Get words list data
 const params = new URLSearchParams(window.location.search);
 const wordsList = JSON.parse(params.get("words"));
-
-
-// Backend URL
-const endpoint = 'http://localhost:4000';
 
 
 // Footer

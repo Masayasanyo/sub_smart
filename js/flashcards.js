@@ -1,5 +1,4 @@
-// Backend URL
-const endpoint = 'http://localhost:4000';
+import { endpoint } from "./config.js";
 
 
 // Footer
