@@ -76,6 +76,24 @@ document.getElementById("logout").addEventListener("click", () => {
 });
 
 
+//  Delete an account
+document.getElementById("delete-account").addEventListener("click", async () => {
+    try {
+        const token = localStorage.getItem("jwt");
+        await fetch(`${endpoint}/accounts/`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`, 
+                'Content-Type': 'application/json',
+            }, 
+        });
+        window.location.href = 'login.html';
+    } catch (error) {
+        console.error(`Internal server error.`, error);
+    }
+});
+
+
 // Send sign up form to backend
 document.getElementById("submit-btn").addEventListener("click", async () => {
         const form = document.getElementById("account-form");
@@ -97,7 +115,6 @@ document.getElementById("submit-btn").addEventListener("click", async () => {
                 body: JSON.stringify(userData), 
             });
             const data = await response.json();
-            console.log(data)
             window.location.href = 'login.html';
         } catch (error) {
             console.error(`Internal server error.`, error);
