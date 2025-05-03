@@ -24,12 +24,20 @@
             <form class="login-form" id="login-form">
                 <label>
                     Email
-                    <input class="input" type="email" name="email">
+                    <input class="input" type="email" name="email" id="email">
                 </label>
+
                 <label>
                     Password
-                    <input class="input" type="password" name="password">
+                    <input class="input" type="password" name="password" id="password">
                 </label>
+
+                <p class="err-msg" id="email-pass-invalid-err">Invalid email or password.</p>
+                <p class="err-msg" id="email-err">Email is required.</p>
+                <p class="err-msg" id="email-invalid-err">Invalid email address.</p>
+                <p class="err-msg" id="email-too-long-err">Email is too long.</p>
+                <p class="err-msg" id="pass-len-err">Password is too short.</p>
+
                 <button type="button" id="login-btn" class="btn width-max">Login</button>
             </form>
 

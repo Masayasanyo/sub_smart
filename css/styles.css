@@ -18,7 +18,7 @@ a {
 h1 {
     text-align: center;
 }
-main {
+main, .msg-container {
     display: flex;
     flex-direction: column;
     gap: 2rem;
@@ -124,7 +124,7 @@ img {
 .cancel-btn {
     width: 50px;
     height: 50px;
-    margin: auto 0;
+    margin: auto 0 auto auto;
 }
 .add-btn, .shuffle-btn {
     width: 30px;
@@ -199,6 +199,25 @@ nav hr {
     border: 1px solid #F2EFE7;
 }
 
+
+/* Message */
+.err-msg {
+    border-radius: 5px;
+    padding: 8px 12px;
+    background-color: pink;
+    color: rgb(109, 9, 9);
+    display: none;
+}
+.msg {
+    display: none;
+    flex-direction: column;
+    gap: 3rem;
+}
+.msg p {
+    font-size: 1.5rem;
+}
+
+
 /* Header */
 header {
     max-width: 800px;
@@ -263,8 +282,11 @@ footer {
     gap: 1rem;
 }
 .words {
-    display: flex;
-    gap: 1rem;
+    /* display: flex;
+    gap: 1rem; */
+    display: grid;
+    grid-template-columns: 8fr 1fr;
+    /* gap: .8rem; */
 }
 
 /* Flashcard */
@@ -294,7 +316,10 @@ footer {
 /* Account page */
 .logout {
     color: #2973B2;
-    text-align: center;
+    /* text-align: center; */
+}
+.delete-account {
+    color: rgb(109, 9, 9);
 }
 
 @media (min-width: 800px) {

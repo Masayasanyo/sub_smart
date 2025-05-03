@@ -1,6 +1,6 @@
 // Get card id
 const params = new URLSearchParams(window.location.search);
-const id = JSON.parse(params.get("id"));
+const id = params.get("id");
 
 
 // Backend URL
@@ -16,9 +16,11 @@ document.querySelector("#year").innerHTML = currentYear;
 document.getElementById("nav-cancel").addEventListener("click", () => {
     document.getElementById("sidebar").style.display = "none";
 });
+
 document.getElementById("open-nav").addEventListener("click", () => {
     document.getElementById("sidebar").style.display = "block";
 });
+
 document.getElementById("sidebar").style.display = "none";
 
 
@@ -46,8 +48,8 @@ checkSession();
 
 
 // // Fetch card data
-let cardInfo = [];
 let cardsData = [];
+
 async function fetchCard() {
 	try {
 		const token = localStorage.getItem("jwt");
@@ -60,14 +62,19 @@ async function fetchCard() {
             body: JSON.stringify({ card_id: id }), 
 		});
 		const data = await response.json();
+
+        if (!data.card_info || !data.cards) {
+            document.getElementById('card-info-err').style.display = 'block';
+            document.getElementById('main').style.display = 'none';
+            return;
+        } else {
+            document.getElementById("fc-title").value = data.card_info.title;
+        }
+
         if (data.cards.length > 0) {
             cardsData = data.cards;
         }
-        if (data.card_info.length > 0) {
-            cardInfo = data.card_info;
-        }
 
-        console.log(data)
         setHtml();
 	} catch (error) {
 		console.error(`Internal server error.`, error);
@@ -76,21 +83,30 @@ async function fetchCard() {
 fetchCard();
 
 
-// // Display form button
+// // Form button
+const formHtml = document.getElementById("add-card-form");
+
 document.getElementById("add-btn").addEventListener("click", () => {
-    const state = document.getElementById("add-card-form").style.display;
+    const state = formHtml.style.display;
     if (state === "none" || !state) {
-        document.getElementById("add-card-form").style.display = "flex";
+        formHtml.style.display = "flex";
     } else {
-        document.getElementById("add-card-form").style.display = "none";
+        formHtml.style.display = "none";
     }
 });
 
 
 // Add new cards
 document.getElementById("add-card-btn").addEventListener("click", async () => {
-    const enWord = document.getElementById("new-en").value;
-    const jaWord = document.getElementById("new-ja").value;
+    const enWord = document.getElementById("new-en").value.trim();
+    const jaWord = document.getElementById("new-ja").value.trim();
+    if (!enWord || !jaWord) {
+        document.getElementById('add-card-err').style.display = 'block';
+        return;
+    } else {
+        document.getElementById("add-card-err").style.display = "none";
+    }
+
     const wordsList = [{ en: enWord, ja: jaWord }];
 
     try {
@@ -103,8 +119,8 @@ document.getElementById("add-card-btn").addEventListener("click", async () => {
             }, 
             body: JSON.stringify({ wordsList: wordsList, card_id: id }), 
         });
-        document.getElementById("add-card-form").style.display = "none";
-        fetchCard()
+        formHtml.style.display = "none";
+        fetchCard();
     } catch (error) {
         console.error(`Internal server error.`, error);
     }
@@ -113,7 +129,6 @@ document.getElementById("add-card-btn").addEventListener("click", async () => {
 
 // Set html
 function setHtml() {
-    document.getElementById("fc-title").value = cardInfo[0].title;    
     document.getElementById("cards").innerHTML = cardsData
         .map((card) => {
             const id = card.id;
@@ -150,14 +165,6 @@ function setHtml() {
 
 // Delete words
 function deleteWord(id) {
-    const targetId = `w-id-${id}`;
-    let currrentHtml = document.querySelectorAll(".words");
-    currrentHtml.forEach(html => {
-        if (html.id === targetId) {
-            html.remove();
-        }
-    });
-
     cardsData = cardsData.filter(card => card.id !== id);
     setHtml();
 }
@@ -177,16 +184,15 @@ document.getElementById("submit-change-btn").addEventListener("click", async () 
             }, 
             body: JSON.stringify({ title: title, wordsList: cardsData, card_id: id }), 
         });
-        document.getElementById("add-card-form").style.display = "none";
-        const params = new URLSearchParams({ id, id });
+        formHtml.style.display = "none";
         window.location.href = `flashcard.html?${params.toString()}`;
     } catch (error) {
         console.error(`Internal server error.`, error);
     }
 });
 
+
 // Cancel edit
 document.getElementById("cancel-edit-btn").addEventListener("click", async () => {
-    const params = new URLSearchParams({ id, id });
     window.location.href = `flashcard.html?${params.toString()}`;
 });

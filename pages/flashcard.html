@@ -55,13 +55,24 @@
             </svg>
         </header>
 
-        <main>
+        <div class="msg-container">
+            <p class="err-msg" id="card-info-err">Cards not found.</p>
+            <div class="msg" id="finish-card-msg">
+                <p>You have finished this deck for now.</p>
+                <button class="btn width-max result-ok-btn" id="result-ok-btn" type="button">OK</button>
+            </div>
+            <div class="msg" id="score-msg">
+                <p id="score-msg-p"></p>
+                <button class="btn width-max result-ok-btn" id="result-ok-btn" type="button">OK</button>
+            </div>
+        </div>
+
+        <main id="main">
             <svg id="edit-btn" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-three-dots dot-btn" viewBox="0 0 16 16">
                 <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
             </svg>
             <h2 id="fc-title"></h2>
                            
-
             <div class="q-container">
                 <div class="q-header">
                     <svg id="shuffle-btn" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-shuffle shuffle-btn" viewBox="0 0 16 16">

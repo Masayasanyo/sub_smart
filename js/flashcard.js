@@ -1,6 +1,6 @@
 // Get card id
 const params = new URLSearchParams(window.location.search);
-const id = JSON.parse(params.get("id"));
+const id = params.get("id");
 
 
 // Backend URL
@@ -16,9 +16,11 @@ document.querySelector("#year").innerHTML = currentYear;
 document.getElementById("nav-cancel").addEventListener("click", () => {
     document.getElementById("sidebar").style.display = "none";
 });
+
 document.getElementById("open-nav").addEventListener("click", () => {
     document.getElementById("sidebar").style.display = "block";
 });
+
 document.getElementById("sidebar").style.display = "none";
 
 
@@ -46,7 +48,6 @@ checkSession();
 
 
 // Fetch card
-let cardInfo = [];
 let cardsData = [];
 let cardsAgain = [];
 let cardsOk = [];
@@ -64,6 +65,14 @@ async function fetchCard() {
 		});
 		const data = await response.json();
 
+        if (!data.card_info || !data.cards) {
+            document.getElementById('card-info-err').style.display = 'block';
+            document.getElementById('main').style.display = 'none';
+            return;
+        } else {
+            document.getElementById("fc-title").innerHTML = data.card_info.title;
+        }
+
         if (data.cards.length > 0) {
             cardsData = data.cards.filter(card => card.progress === false);
             if (cardsData.length < 1) {
@@ -71,17 +80,9 @@ async function fetchCard() {
             }
             cardsAgain = [];
             cardsOk = [];
-        } else {
-            return;
         }
 
-        if (data.card_info.length > 0) {
-            cardInfo = data.card_info;
-        } else {
-            return;
-        }
-
-        setHtml();
+        setCard();
 	} catch (error) {
 		console.error(`Internal server error.`, error);
 	}
@@ -89,22 +90,59 @@ async function fetchCard() {
 fetchCard();
 
 
-// Set html
+// Set card
+let cardHtml = document.getElementById("q-word");
+let cardTotalHtml = document.getElementById("card-total");
+let cardCurrentHtml = document.getElementById("card-current");
+
 let current_card = {
     id: null, 
     index: 0, 
     en: "", 
-    ja: ""
+    ja: "", 
 };
 
-function setHtml() {
-    document.getElementById("fc-title").innerHTML = cardInfo[0].title;
-    document.getElementById("q-word").innerHTML = cardsData[0].ja;
-    current_card.id = cardsData[0].id;
-    current_card.en = cardsData[0].en;
-    current_card.ja = cardsData[0].ja;
-    document.getElementById("card-total").innerHTML = cardsData.length;
-    document.getElementById("card-current").innerHTML = 1;
+function setCard() {
+    if (cardsData.length > 0) {
+        cardHtml.innerHTML = cardsData[0].ja;
+        cardTotalHtml.innerHTML = cardsData.length;
+        cardCurrentHtml.innerHTML = 1;
+
+        current_card.id = cardsData[0].id;
+        current_card.index = 0;
+        current_card.en = cardsData[0].en;
+        current_card.ja = cardsData[0].ja;
+    } else {
+        return;
+    }
+}
+
+function changeCard() {
+    if (cardsData[current_card.index + 1]) {
+        cardHtml.innerHTML = cardsData[current_card.index + 1].ja;
+        cardCurrentHtml.innerHTML = Number(cardCurrentHtml.innerHTML) + 1;
+
+        current_card.index = current_card.index + 1;
+        current_card.id = cardsData[current_card.index].id;
+        current_card.en = cardsData[current_card.index].en;
+        current_card.ja = cardsData[current_card.index].ja;
+    } else {
+        current_card = {
+            id: null, 
+            index: 0, 
+            en: "", 
+            ja: "", 
+        };
+        if (cardsAgain.length < 1) {
+            document.getElementById('finish-card-msg').style.display = 'flex';
+            document.getElementById('main').style.display = 'none';
+        } else {
+            document.getElementById('score-msg').style.display = 'flex';
+            document.getElementById('score-msg-p').innerHTML = 
+                `Your score is ${cardsOk.length}/${cardsData.length}.`;
+            document.getElementById('main').style.display = 'none';
+        }
+    }
 }
 
 
@@ -123,18 +161,7 @@ document.getElementById("ok-btn").addEventListener("click", () => {
     cardsOk.push({ id: current_card.id, en: current_card.en, ja: current_card.ja });
     cardsAgain = cardsAgain.filter(card => card.id !== current_card.id);
 
-    if (cardsData[current_card.index + 1]) {
-        document.getElementById("q-word").innerHTML = cardsData[current_card.index + 1].ja;
-        current_card.index = current_card.index + 1;
-        document.getElementById("card-current").innerHTML = Number(document.getElementById("card-current").innerHTML) + 1;
-        current_card.id = cardsData[current_card.index].id;
-        current_card.en = cardsData[current_card.index].en;
-        current_card.ja = cardsData[current_card.index].ja;
-    } else {
-        fetchCard();
-        current_card.index = 0;
-        submitResult();
-    }
+    changeCard();
 });
 
 
@@ -143,18 +170,7 @@ document.getElementById("again-btn").addEventListener("click", () => {
     cardsAgain.push({ id: current_card.id, en: current_card.en, ja: current_card.ja });
     cardsOk = cardsOk.filter(card => card.id !== current_card.id);
 
-    if (cardsData[current_card.index + 1]) {
-        document.getElementById("q-word").innerHTML = cardsData[current_card.index + 1].ja;
-        current_card.index = current_card.index + 1;
-        document.getElementById("card-current").innerHTML = Number(document.getElementById("card-current").innerHTML) + 1;
-        current_card.id = cardsData[current_card.index].id;
-        current_card.en = cardsData[current_card.index].en;
-        current_card.ja = cardsData[current_card.index].ja;
-    } else {
-        fetchCard();
-        current_card.index = 0;
-        submitResult();
-    }
+    changeCard();
 });
 
 
@@ -171,7 +187,15 @@ function shuffle(array) {
 // Click shuffle button
 document.getElementById("shuffle-btn").addEventListener("click", () => {
     cardsData = shuffle(cardsData);
-    setHtml();
+    setCard();
+});
+
+
+// Click ok and submit result
+document.querySelectorAll(".result-ok-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        submitResult();
+    });
 });
 
 
@@ -187,7 +211,6 @@ async function submitResult() {
             }, 
             body: JSON.stringify({ again: cardsAgain, ok: cardsOk }), 
 		});
-        const params = new URLSearchParams({ id, id });
         window.location.href = `flashcard.html?${params.toString()}`;
 	} catch (error) {
 		console.error(`Internal server error.`, error);
@@ -195,8 +218,7 @@ async function submitResult() {
 }
 
 
-// Jump to the edit page
+// To the edit page
 document.getElementById("edit-btn").addEventListener("click", () => {
-    const params = new URLSearchParams({ id, id });
     window.location.href = `edit_flashcard.html?${params.toString()}`;
 });

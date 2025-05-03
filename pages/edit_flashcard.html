@@ -57,21 +57,25 @@
 
         <main>
             <div class="edit-fc-header">
-                <input id="fc-title" placeholder="Title">
-                <svg id="add-btn" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle-fill add-btn" viewBox="0 0 16 16">
+                <input class="input" id="fc-title" placeholder="Title">
+                <svg id="add-btn" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="add-btn" viewBox="0 0 16 16">
                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
                 </svg>
             </div>
-
+            
             <form id="add-card-form">
                 <label>
                     En
                     <input id="new-en" type="text" class="input">
                 </label>
+                
                 <label>
                     Ja
                     <input id="new-ja" type="text" class="input">
                 </label>
+
+                <p class="err-msg" id="add-card-err">All fields are required.</p>
+
                 <button id="add-card-btn" type="button" class="btn width-max">Submit</button>
             </form>
             
