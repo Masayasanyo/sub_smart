@@ -99,17 +99,18 @@ function setHtml() {
     document.getElementById("fc-list").innerHTML = cardsList
         .map((card) => {
             return `
-                    <li class="fc" id="c-id-${card.id}" onclick="seeCard(${card.id})">
+                    <li class="fc" id="c-id-${card.id}">
                         <p>${card.title}</p>
                     </li>
                     `;
             })
         .join("");  
-}
 
-
-// Click a card and change the page
-function seeCard(id) {
-    const params = new URLSearchParams({ id, id });
-    window.location.href = `flashcard.html?${params.toString()}`;
+    document.querySelectorAll(".fc").forEach(d => {
+        const id = Number(d.id.split("-")[2]);
+        d.addEventListener("click", () => {
+            const params = new URLSearchParams({ id });
+            window.location.href = `flashcard.html?${params.toString()}`;
+        })
+    })
 }
