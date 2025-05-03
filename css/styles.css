@@ -168,6 +168,10 @@ img {
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
     resize: none;
 }
+.card-input {
+    width: 100%;
+    resize: none;
+}
 .high-ta {
     height: 300px;
 }

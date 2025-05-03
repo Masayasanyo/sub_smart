@@ -140,7 +140,7 @@ function setHtml() {
                         <div class="dic">
                             <div>
                                 <p>EN</p>
-                                <p class="en-meaning">${enWord}</p>
+                                <textarea id="en-id-${id}" class="card-input en-input">${enWord}</textarea>
                             </div>
             
                             <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-arrow-left-right arrow-btn" viewBox="0 0 16 16">
@@ -149,7 +149,7 @@ function setHtml() {
             
                             <div>
                                 <p>JA</p>
-                                <p class="ja-meaning">${jaWord}</p>
+                                <textarea id="ja-id-${id}" class="card-input ja-input">${jaWord}</textarea>
                             </div>
                         </div>
 
@@ -159,7 +159,37 @@ function setHtml() {
                     </li>       
                     `;
             })
-        .join("");  
+        .join("");
+    
+    addOnChange()
+}
+
+function addOnChange() {
+    document.querySelectorAll(".en-input").forEach(word => {
+        word.addEventListener("input", () => {
+            const cardId = Number(word.id.split("-")[2]);
+            const text = word.value;
+            
+            for (let i = 0; i < cardsData.length; i++) {
+                if (cardsData[i].id === cardId) {
+                    cardsData[i].en = text;
+                }
+            }
+        })
+    })
+
+    document.querySelectorAll(".ja-input").forEach(word => {
+        word.addEventListener("input", () => {
+            const cardId = Number(word.id.split("-")[2]);
+            const text = word.value;
+            
+            for (let i = 0; i < cardsData.length; i++) {
+                if (cardsData[i].id === cardId) {
+                    cardsData[i].ja = text;
+                }
+            }
+        })
+    })
 }
 
 
@@ -184,7 +214,9 @@ document.getElementById("submit-change-btn").addEventListener("click", async () 
             }, 
             body: JSON.stringify({ title: title, wordsList: cardsData, card_id: id }), 
         });
+
         formHtml.style.display = "none";
+
         window.location.href = `flashcard.html?${params.toString()}`;
     } catch (error) {
         console.error(`Internal server error.`, error);
