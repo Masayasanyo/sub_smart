@@ -18,11 +18,11 @@ a {
 h1 {
     text-align: center;
 }
-main, .msg-container {
+main {
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    max-width: 800px;
+    max-width: 1120px;
     margin: 0 auto;
     padding: 1.5rem;
 }
@@ -176,6 +176,7 @@ img {
     height: 300px;
 }
 
+
 /* nav */
 nav {
     position: fixed;
@@ -205,6 +206,14 @@ nav hr {
 
 
 /* Message */
+.msg-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
 .err-msg {
     border-radius: 5px;
     padding: 8px 12px;
@@ -224,7 +233,7 @@ nav hr {
 
 /* Header */
 header {
-    max-width: 800px;
+    max-width: 1120px;
     margin: 0 auto;
     padding: 3rem 1.5rem;
     display: flex;
@@ -258,6 +267,11 @@ footer {
     display: flex;
     gap: 1rem;
 }
+.video-script {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
 .transcript {
     width: 100%;
     height: 200px;
@@ -286,11 +300,8 @@ footer {
     gap: 1rem;
 }
 .words {
-    /* display: flex;
-    gap: 1rem; */
     display: grid;
     grid-template-columns: 8fr 1fr;
-    /* gap: .8rem; */
 }
 
 /* Flashcard */
@@ -320,11 +331,59 @@ footer {
 /* Account page */
 .logout {
     color: #2973B2;
-    /* text-align: center; */
 }
 .delete-account {
     color: rgb(109, 9, 9);
 }
 
+
 @media (min-width: 800px) {
+    /* nav */
+    nav {
+        left: auto;
+        right: 0;
+        width: 500px;
+    }
+
+    /* Button */
+    .nav-cancel {
+        margin-right: auto;
+        margin-left: 0;
+    }
+
+    /* Home */
+    .video-script {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+    .transcript {
+        height: auto;
+        aspect-ratio: 16/9;
+    }
+
+    /* Flashcard */
+    .q-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: 60%;
+    }
+    /* .progress {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+    } */
+    .q-main {
+        width: 100%;
+        aspect-ratio: 16/9;
+        border: 5px solid #2973B2;
+        border-radius: 10px;
+        padding: 10px 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.5rem;
+        word-break: break-word;
+    }
 }

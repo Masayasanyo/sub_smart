@@ -51,7 +51,7 @@ document.getElementById("submit-url").addEventListener("click", (e) => {
     srcUrl = "https://www.youtube.com/embed/";
     videoId = '';
 
-    videoId = document.getElementById("url").value.split("v=")[1];
+    videoId = document.getElementById("url").value.split("v=")[1].split("&")[0];
     srcUrl = srcUrl + videoId;
 
 	document.querySelector(".video").src = srcUrl;
